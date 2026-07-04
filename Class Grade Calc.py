@@ -68,28 +68,79 @@ myDict[1].exportCategory()
  #   def createConfig(self, courseName):
 
 
+def createClass():
+    i = 0
+    if os.path.isfile("Class_Grade_Calc.config"):
+        configFile = open("Class_Grade_Calc.config", "r")
+        while True:
+            line = configFile.readline()
+            print(line)
+            if "START_CLASS" in line:
+                line = configFile.readline()    # Feed PHY 301              # you should separate this logic it's getting complicated to keep track
+                print(line)
+                CLASS_DICT[i] = CourseBuilder(line) # Create PHY 301
+                line = configFile.readline()    # Feed category "HW"
+                print(line)
+
+                while "END_CLASS" not in line:
+                    tempClassName = line        
+                    line = configFile.readline()    # Feed percent after saving name
+                    print(line)
+
+                    CLASS_DICT[i].addCategory(tempClassName, line)  # Create category
+                    line = configFile.readline()
+                    print(line)
+                i += 1
+            elif "END_CLASS" in line:
+                line = configFile.readline()
+                continue
+            elif "END_DOC" in line:
+                return
+    
+
 
 def initialize():
     i = 0
     if not os.path.isfile("Class_Grade_Calc.config"):
         configFile = open("Class_Grade_Calc.config", "w")
+        configFile.close()
     if os.path.isfile("Class_Grade_Calc.config"):
-        configFile = open("Class_Grade_Calc.config", "r")
-        while True:
-            line = configFile.readline()
-            if "START_CLASS" in line:
-                line = configFile.readline()
-                CLASS_DICT[i] = CourseBuilder(line)
-                line = configFile.readline()
+        createClass()
+        # configFile = open("Class_Grade_Calc.config", "r")
+        # while True:
+        #     line = configFile.readline()
+        #     if "START_CLASS" in line:
+        #         line = configFile.readline()    # Feed PHY 301              # you should separate this logic it's getting complicated to keep track
+        #         print(line)
+        #         CLASS_DICT[i] = CourseBuilder(line) # Create PHY 301
+        #         line = configFile.readline()    # Feed category "HW"
+        #         while "END_CLASS" not in line:
+        #             tempClassName = line        
+        #             line = configFile.readline()    # Feed percent after saving name
+        #             CLASS_DICT[i].addCategory(tempClassName, line)  # Create category
+        #             line = configFile.readline()
+                
+        #         i += 1
+    elif "END_CLASS" in line:  # how do i go back to that if statement? define a function instead
+        pass
+                
+    else:
+        configFile.close()
 
-                i += 1
+
+                
+        
+
                 
 
             
 
 
 def addClass():
-    print("In Progress")
+
+
+
+
     main()
 
 
@@ -125,7 +176,8 @@ def settings():
     print("In Progress")
     main()
 
-
+def showClasses():
+    pass
 
 
 def main():
@@ -148,7 +200,7 @@ def main():
             break
 
         elif selection == "2":
-            savedClasses()
+            showClasses()                          # temp using showClasses, used to be savedClasses()
             selection = 0
             break
 
@@ -165,6 +217,7 @@ def main():
         elif selection == "5":
             print()
             return
+        
 
         else:
             print()
